@@ -71,8 +71,8 @@ const LoginForm = () => {
                     <div className="text-center">
                         <p className="text-xl font-semibold">Login To Existing Account</p>
                         <p className="text-sm text-[#686870]">Enter your username below to login to your account</p>
-                        <Input onChange={(e) => setUsername(e.target.value)} className="mt-10 w-[400px] border-[#686870] focus:border-white" placeholder="username" />
-                        <Input onChange={(e) => setPassword(e.target.value)} className="mt-2 w-[400px] border-[#686870] focus:border-white" placeholder="password" type="password" />
+                        <Input onChange={(e) => setUsername(e.target.value)} className="mt-10 w-[400px] border-[#686870] focus:border-white hover:border-blue-500 hover:shadow-[0_0_10px_2px_rgba(59,130,246,1)] transition-all duration-300 ease-in-out p-4" placeholder="username" />
+                        <Input onChange={(e) => setPassword(e.target.value)} className="mt-2 w-[400px] border-[#686870] focus:border-white hover:border-blue-500 hover:shadow-[0_0_10px_2px_rgba(59,130,246,1)] transition-all duration-300 ease-in-out p-4" placeholder="password" type="password" />
                         <Button disabled={isLoading || (!username && !password)} onClick={handleSubmit} className="mt-2 w-[400px] bg-white text-black hover:bg-slate-100">Log In</Button>
                     </div>
                     <div className="mt-4">
