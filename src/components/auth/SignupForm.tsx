@@ -45,7 +45,13 @@ const SignupForm = () => {
             })
             .catch(function (error) {
                 if (error.response.data.message) {
-                    setError(error.response.data.message)
+                    if (error.response.data.message === "String must contain at least 3 character(s)") {
+                        setError("Username must contain at least 3 character(s)")
+                    }
+                    else if (error.response.data.message === "String must contain at least 8 character(s)") {
+                        setError("Password must contain at least 8 character(s)")
+                    }
+                    else setError(error.response.data.message)
                 }
             });
         setIsLoading(false)
@@ -65,9 +71,9 @@ const SignupForm = () => {
                     <div className="text-center">
                         <p className="text-xl font-semibold">Create An Account</p>
                         <p className="text-sm text-[#686870]">Enter your username below to create your account</p>
-                        <Input onChange={(e) => setUsername(e.target.value)} className="mt-10 w-[400px] border-[#686870] focus:border-white" placeholder="name" />
+                        <Input onChange={(e) => setUsername(e.target.value)} className="mt-10 w-[400px] border-[#686870] focus:border-white" placeholder="username" />
                         <Input onChange={(e) => setPassword(e.target.value)} className="mt-2 w-[400px] border-[#686870] focus:border-white" placeholder="password" type="password" />
-                        <Button disabled={isLoading} onClick={handleSubmit} className="mt-2 w-[400px] bg-white text-black hover:bg-slate-100">Sign Up</Button>
+                        <Button disabled={isLoading || (!username && !password)} onClick={handleSubmit} className="mt-2 w-[400px] bg-white text-black hover:bg-slate-100">Sign Up</Button>
                     </div>
                     <div className="mt-4">
                     <p className="text-center text-[#ff4400]">{error}</p>

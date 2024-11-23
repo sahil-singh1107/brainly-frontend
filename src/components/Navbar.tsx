@@ -8,6 +8,7 @@ import {
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -33,6 +34,9 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import axios from "axios"
 import Content from "./Content"
+import { DialogClose } from "@radix-ui/react-dialog"
+import { Draggable } from 'react-draggable';
+
 
 const frameworks = [
     {
@@ -62,6 +66,10 @@ const frameworks = [
     {
         value: "code",
         label: "code"
+    },
+    {
+        value: "todo",
+        label: "todo"
     }
 ]
 
@@ -78,6 +86,7 @@ const Navbar = () => {
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('');
+    const [dialogOpen, setDialogOpen] = useState(false)
 
     function handleLogOut() {
         localStorage.removeItem("token")
@@ -90,48 +99,70 @@ const Navbar = () => {
         setInputValue(value);
         if (value.includes(" ")) {
             const newTags = value
-                .trim() 
-                .split(" ") 
-                .filter((tag : any) => tag !== ""); 
+                .trim()
+                .split(" ")
+                .filter((tag: any) => tag !== "");
 
             setTags([...tags, ...newTags]);
-            setInputValue(""); 
+            setInputValue("");
         }
     }
 
-    function handleSubmit () {
-        console.log(link, title, tags, value)
+    function handleSubmit() {
+        if (!isURL(link)) {
+            setError("Please enter a valid URL")
+            return;
+        }
         setIsLoading(true)
         axios.post(url, {
             token,
-            link, 
+            link,
             linkType: value,
             title,
             tags
-          })
-          .then(function (response) {
-           toast("Content Added");
-           setTitle('')
-           setLink('')
-           setTags([])
-            setValue('')
-          })
-          .catch(function (error) {
-            setError(error.response.data.message);
-          });
+        })
+            .then(function (response) {
+                toast("Content Added");
+                setTitle('')
+                setLink('')
+                setTags([])
+                setValue('')
+                setError('')
+                setDialogOpen(false)
+            })
+            .catch(function (error) {
+                if (!link) {
+                    setError("Link cannot be empty")
+                }
+                else if (!value) {
+                    setError("Select a link type")
+                }
+                else if (!title) {
+                    setError("Title cannot be empty")
+                }
+            });
         setIsLoading(false)
     }
 
+    function isURL(str) {
+        var pattern = new RegExp(
+          '^(https?:\\/\\/)?' + // protocol
+          '(([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}(\\:\\d+)?(\\/[^#?]*)?(\\?[^#]*)?(#.*)?$',
+          'i'
+        );
+        return !!pattern.test(str);
+      }
+
     return (
         <>
-        <Toaster />
+            <Toaster />
             <div>
                 <div className='relative font-bold text-4xl top-9 flex justify-between'>
                     <div className='flex gap-8'>
                         <p>All Notes</p>
                         <Popover>
                             <PopoverTrigger>
-                                <Avatar className='hover:border hover:border-b-slate-400 hover:cursor-pointer'>
+                                <Avatar className='hover:cursor-pointer hover:border-blue-500 hover:shadow-[0_0_10px_2px_rgba(59,130,246,1)] transition-all duration-300 ease-in-out'>
                                     <AvatarImage src="https://github.com/shadcn.png" />
                                     <AvatarFallback>CN</AvatarFallback>
                                 </Avatar>
@@ -139,9 +170,9 @@ const Navbar = () => {
                             <PopoverContent className='bg-black border-[#26262A] text-white text-center hover:cursor-pointer' onClick={handleLogOut}>Logout</PopoverContent>
                         </Popover>
                     </div>
-                    <Dialog>
-                        <DialogTrigger><Button className='mr-10'>Add Content</Button></DialogTrigger>
-                        <DialogContent className="text-white">
+                    <Dialog open={dialogOpen}>
+                        <DialogTrigger asChild><Button onClick={() => setDialogOpen(true)} className='mr-10'>Add Content</Button></DialogTrigger>
+                        <DialogContent className="text-white [&>button]:hidden">
                             <DialogHeader>
                                 <DialogTitle className='text-white mb-3'>Add content</DialogTitle>
                                 <div className="text-white space-y-3">
@@ -158,6 +189,7 @@ const Navbar = () => {
                                                     ? frameworks.find((framework) => framework.value === value)?.label
                                                     : "Select Type..."}
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="p-0">
@@ -196,6 +228,13 @@ const Navbar = () => {
                                     <p className="text-center text-red-500">{error}</p>
                                 </div>
                             </DialogHeader>
+                            <DialogFooter>
+                            <DialogClose asChild>
+                                <Button onClick={() => setDialogOpen(false)} type="button" variant="secondary">
+                                    Close
+                                </Button>
+                            </DialogClose>
+                        </DialogFooter>
                         </DialogContent>
                     </Dialog>
                 </div>
