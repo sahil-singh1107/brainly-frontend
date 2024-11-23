@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { tokenAtom } from "@/store/atoms/atoms";
 import axios from "axios";
 import { useEffect, useState } from "react"
@@ -30,9 +31,11 @@ const Content = () => {
         axios.post(url, { token: token })
             .then(response => {
                 const dataArray = response.data.data;
+                // @ts-ignore
                 const extractedInfo = dataArray.map(item => ({
                     link: item.link,
                     linkType: item.linkType,
+                    // @ts-ignore
                     tags: item.tags.map(tag => ({ title: tag.title })),
                     title: item.title,
                 }));

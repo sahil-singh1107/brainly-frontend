@@ -1,6 +1,6 @@
 
 import Sidebar from '@/components/Sidebar'
-import React from 'react'
+
 
 const Tags = () => {
   return (
@@ -9,7 +9,7 @@ const Tags = () => {
        <Sidebar/>
       </div>
       <div className="w-3/4 h-screen ml-10">
-            
+
       </div>
     </div>
   )

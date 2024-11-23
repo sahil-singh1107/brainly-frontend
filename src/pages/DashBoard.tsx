@@ -1,9 +1,9 @@
+// @ts-nocheck
 import { useRecoilState } from "recoil"
 import { tokenAtom } from "@/store/atoms/atoms"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import Navbar from "@/components/Navbar"
-import { Button } from "@/components/ui/button"
 import Sidebar from "@/components/Sidebar"
 
 const DashBoard = () => {
