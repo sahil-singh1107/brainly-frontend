@@ -9,3 +9,8 @@ export const tagsAtom = atom({
     key: "tag",
     default: []
 })
+
+export const linkAtom = atom({
+    key: "link",
+    default: ""
+})
