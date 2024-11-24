@@ -52,7 +52,7 @@ const Content = () => {
                     console.error("Error:", error);
                 });
         }
-    }, [token]);
+    }, [token, contents]);
 
     useEffect(() => {
         if (selectedTags.length > 0 && token) {
@@ -70,7 +70,7 @@ const Content = () => {
                 console.error("Error:", error);
             });
         }
-    }, [token]);
+    }, [token, contents]);
 
     function convertFigmaUrl(originalUrl: string): string {
         const url = new URL(originalUrl);
